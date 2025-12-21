@@ -17,7 +17,8 @@ NEW_HEADER_DIR="out/include"
 targets=("aarch64-apple-ios" "aarch64-apple-ios-sim" "aarch64-apple-darwin")
 
 for target in "${targets[@]}"; do
-    cargo build --target "${target}" --release
+    rustup target add ${target}
+    cargo build --target "${target}" --release -j8
     cargo run --bin uniffi-bindgen generate --library target/${target}/release/lib${MY_CRATE}.a --language swift --out-dir out
 done
 
