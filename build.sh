@@ -1,3 +1,5 @@
+set -euo pipefail
+
 MY_CRATE=rustylib
 SWIFT_APP=swiftyapp
 SWIFT_PROJECT=swiftyrustlib
@@ -8,7 +10,8 @@ cd $MY_CRATE
 
 # step 1 - compile rust library and generate bindings
 HEADERPATH="out/${MY_CRATE}FFI.h"
-TARGETDIR="target"
+TARGETDIR="$(cargo metadata --no-deps --format-version 1 | tr -d '\n' | sed -n 's/.*"target_directory":"\([^"]*\)".*/\1/p')"
+TARGETDIR="${TARGETDIR:-target}"
 OUTDIR="../${MY_CRATE}"
 RELDIR="release"
 STATIC_LIB_NAME="lib${MY_CRATE}.a"
@@ -19,7 +22,7 @@ targets=("aarch64-apple-ios" "x86_64-apple-ios" "aarch64-apple-darwin")
 for target in "${targets[@]}"; do
     rustup target add ${target}
             cargo build --target "${target}" --release -j8
-            cargo run --bin uniffi-bindgen generate --library target/${target}/release/librustylib.a --language swift --out-dir out
+            cargo run --bin uniffi-bindgen generate --library "${TARGETDIR}/${target}/${RELDIR}/${STATIC_LIB_NAME}" --language swift --out-dir out
         done
 # step 2 - create xcframework
 mkdir -p "${NEW_HEADER_DIR}"
