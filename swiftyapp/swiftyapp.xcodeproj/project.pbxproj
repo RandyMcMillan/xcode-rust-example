@@ -31,6 +31,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		29B7A0012DF6E10000A1B2C3 /* Build RustyLib */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
