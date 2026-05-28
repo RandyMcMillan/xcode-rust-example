@@ -29,10 +29,10 @@ cd $MY_CRATE
 HEADERPATH="out/${MY_CRATE}FFI.h"
 TARGETDIR="$(cargo metadata --no-deps --format-version 1 | tr -d '\n' | sed -n 's/.*"target_directory":"\([^"]*\)".*/\1/p')"
 TARGETDIR="${TARGETDIR:-target}"
-OUTDIR="../${MY_CRATE}"
 RELDIR="release"
 STATIC_LIB_NAME="lib${MY_CRATE}.a"
 NEW_HEADER_DIR="out/include"
+XCFRAMEWORK_PATH="${MY_CRATE}_framework.xcframework"
 
 DEVICE_TARGET="aarch64-apple-ios"
 
@@ -63,13 +63,13 @@ mkdir -p "${NEW_HEADER_DIR}"
 cp "${HEADERPATH}" "${NEW_HEADER_DIR}/"
 cp "out/${MY_CRATE}FFI.modulemap" "${NEW_HEADER_DIR}/module.modulemap"
 
-rm -rf "${OUTDIR}/${MY_CRATE}_framework.xcframework"
+rm -rf "${XCFRAMEWORK_PATH}"
 
 xcodebuild -create-xcframework \
     -library "${TARGETDIR}/${DEVICE_TARGET}/${RELDIR}/${STATIC_LIB_NAME}" -headers "${NEW_HEADER_DIR}" \
     -library "${TARGETDIR}/${SIMULATOR_TARGET}/${RELDIR}/${STATIC_LIB_NAME}" -headers "${NEW_HEADER_DIR}" \
     -library "${TARGETDIR}/${CATALYST_TARGET}/${RELDIR}/${STATIC_LIB_NAME}" -headers "${NEW_HEADER_DIR}" \
-    -output "${OUTDIR}/${MY_CRATE}_framework.xcframework"
+    -output "${XCFRAMEWORK_PATH}"
 
 rm -rf "${NEW_HEADER_DIR}"
 
@@ -82,7 +82,7 @@ SWIFT_SOURCES_PATH="${SWIFT_LIB_PATH}/Sources/${SWIFT_PROJECT_NAME}"
 # step 3 - move to SwiftLib artifacts
 mkdir -p "${SWIFT_ARTIFACTS_PATH}"
 rm -rf "${SWIFT_ARTIFACTS_PATH}/${SWIFT_CORE_NAME}.xcframework"
-cp -R "./${MY_CRATE}/${MY_CRATE}_framework.xcframework" "${SWIFT_ARTIFACTS_PATH}/${SWIFT_CORE_NAME}.xcframework"
+cp -R "./${MY_CRATE}/${XCFRAMEWORK_PATH}" "${SWIFT_ARTIFACTS_PATH}/${SWIFT_CORE_NAME}.xcframework"
 
 # step 4 - move to SwiftLib Sources
 mkdir -p "${SWIFT_SOURCES_PATH}"
