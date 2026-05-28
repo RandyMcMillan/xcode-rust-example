@@ -14,10 +14,12 @@ Demonstrates the ability to generate the necessary bindings for a rust lib compi
 `swiftyapp` hello world ios app that imports and uses the two rust lib functions
 `swiftyrustlib` Swift package of rust lib
 
-1. Run `build.sh`
+1. Run `build.sh`.
 1. Open the Xcode project located at `swiftyapp/swiftyapp.xcodeproj`.
 1. Ensure that RustyLib was successfully imported into project.
 1. Build and run the project in Xcode.
+1. For Intel Macs, enable and choose the **Mac Catalyst** destination in Xcode.
+1. On Apple Silicon Macs, you can also choose **My Mac (Designed for iPad)** in Xcode.
 1. Verify that the Rust library functions are successfully called from the Swift project.
 
 

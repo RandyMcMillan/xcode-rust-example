@@ -149,6 +149,9 @@
 				Base,
 			);
 			mainGroup = 291DE5272C3DE74F007F9706;
+			packageReferences = (
+				2986A2DF2C3F8F9800D13583 /* XCLocalSwiftPackageReference "Lib/swiftyrustlib" */,
+			);
 			productRefGroup = 291DE5312C3DE74F007F9706 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -306,8 +309,10 @@
 		291DE53F2C3DE74F007F9706 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftyapp/Preview Content\"";
@@ -324,8 +329,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = mcke.swiftyapp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.gnostr.swiftyapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator driverkit iphoneos iphonesimulator watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -335,8 +344,10 @@
 		291DE5402C3DE74F007F9706 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftyapp/Preview Content\"";
@@ -353,8 +364,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = mcke.swiftyapp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.gnostr.swiftyapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator driverkit iphoneos iphonesimulator watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -384,9 +399,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		2986A2DF2C3F8F9800D13583 /* XCLocalSwiftPackageReference "Lib/swiftyrustlib" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Lib/swiftyrustlib;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		2986A2E22C3F8FA200D13583 /* RustyLib */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 2986A2DF2C3F8F9800D13583 /* XCLocalSwiftPackageReference "Lib/swiftyrustlib" */;
 			productName = RustyLib;
 		};
 /* End XCSwiftPackageProductDependency section */
