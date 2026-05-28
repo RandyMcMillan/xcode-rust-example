@@ -34,16 +34,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"$(SRCROOT)/../build.sh",
-				"$(SRCROOT)/../rustylib/Cargo.toml",
-				"$(SRCROOT)/../rustylib/src/lib.rs",
-			);
 			name = "Build RustyLib";
-			outputPaths = (
-				"$(SRCROOT)/Lib/swiftyrustlib/Sources/RustyLib/RustyLib.swift",
-				"$(SRCROOT)/Lib/swiftyrustlib/artifacts/RustyCore.xcframework/Info.plist",
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "set -euo pipefail\ncd \"${SRCROOT}/..\"\n./build.sh\n";
