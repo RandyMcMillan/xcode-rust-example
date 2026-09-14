@@ -4,7 +4,10 @@ SWIFT_PROJECT=swiftyrustlib
 SWIFT_PROJECT_NAME=RustyLib
 SWIFT_CORE_NAME=RustyCore
 
+set -euo pipefail
+
 cd $MY_CRATE
+export CARGO_TARGET_DIR="$PWD/target"
 
 # step 1 - compile rust library and generate bindings
 HEADERPATH="out/${MY_CRATE}FFI.h"
