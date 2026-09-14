@@ -1,6 +1,8 @@
-# xcode-rust-example
+# [xcode-rust-example](https://randymcmillan.github.io/xcode-rust-example/)
 
 ![Xcode](assets/swift-rust.png)
+
+[![pages-build-deployment](https://github.com/RandyMcMillan/xcode-rust-example/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/RandyMcMillan/xcode-rust-example/actions/workflows/pages/pages-build-deployment)
 
 Demonstrates the ability to generate the necessary bindings for a rust lib compiled for an apple target to be embedded and called by a Swift project in Xcode.
 
