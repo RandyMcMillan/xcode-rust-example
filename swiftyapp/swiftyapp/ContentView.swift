@@ -20,12 +20,23 @@ struct ContentView: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(red: 0.09, green: 0.11, blue: 0.20),
-                    Color(red: 0.14, green: 0.18, blue: 0.31),
-                    Color(red: 0.21, green: 0.15, blue: 0.34)
+                    Color(red: 0.05, green: 0.05, blue: 0.07),
+                    Color(red: 0.10, green: 0.08, blue: 0.06),
+                    Color(red: 0.18, green: 0.09, blue: 0.03)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            RadialGradient(
+                colors: [
+                    Color(red: 1.0, green: 0.60, blue: 0.15).opacity(0.20),
+                    .clear
+                ],
+                center: .topTrailing,
+                startRadius: 20,
+                endRadius: 340
             )
             .ignoresSafeArea()
 
@@ -34,18 +45,31 @@ struct ContentView: View {
                     header
 
                     glassCard {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Label("Rust bridge", systemImage: "bolt.horizontal.circle.fill")
-                                .font(.headline)
-                                .foregroundStyle(.white.opacity(0.95))
+                        HStack(alignment: .center, spacing: 16) {
+                            Image("RustOrb")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 84, height: 84)
+                                .padding(8)
+                                .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                        .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.28), lineWidth: 1)
+                                )
 
-                            Text(rustHello())
-                                .font(.title2.weight(.semibold))
-                                .foregroundStyle(.white)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Label("Rust bridge", systemImage: "sparkles")
+                                    .font(.headline)
+                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
 
-                            Text("This SwiftUI app is wired directly into a Rust library through UniFFI.")
-                                .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.72))
+                                Text(rustHello())
+                                    .font(.title2.weight(.semibold))
+                                    .foregroundStyle(.white)
+
+                                Text("SwiftUI talking to Rust, dressed up in the same warm palette as the icon.")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white.opacity(0.74))
+                            }
                         }
                     }
 
@@ -54,14 +78,14 @@ struct ContentView: View {
                             HStack {
                                 Label("Live calculator", systemImage: "function")
                                     .font(.headline)
-                                    .foregroundStyle(.white.opacity(0.95))
+                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
                                 Spacer()
                                 Text("Rust powered")
                                     .font(.caption.weight(.semibold))
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 6)
-                                    .background(.white.opacity(0.12), in: Capsule())
-                                    .foregroundStyle(.white.opacity(0.9))
+                                    .background(Color(red: 1.0, green: 0.63, blue: 0.18).opacity(0.18), in: Capsule())
+                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
                             }
 
                             stepperRow(
@@ -77,13 +101,13 @@ struct ContentView: View {
                             )
 
                             Divider()
-                                .overlay(.white.opacity(0.15))
+                                .overlay(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.22))
 
                             HStack(alignment: .firstTextBaseline) {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Result")
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.white.opacity(0.7))
+                                        .foregroundStyle(.white.opacity(0.68))
                                     Text("\(firstValue) + \(secondValue)")
                                         .font(.title3.weight(.semibold))
                                         .foregroundStyle(.white)
@@ -95,7 +119,7 @@ struct ContentView: View {
                                     .font(.system(size: 42, weight: .bold, design: .rounded))
                                     .foregroundStyle(
                                         LinearGradient(
-                                            colors: [.white, Color(red: 0.76, green: 0.88, blue: 1.0)],
+                                            colors: [.white, Color(red: 1.0, green: 0.76, blue: 0.42)],
                                             startPoint: .top,
                                             endPoint: .bottom
                                         )
@@ -117,7 +141,7 @@ struct ContentView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Label("What this proves", systemImage: "checkmark.seal.fill")
                                 .font(.headline)
-                                .foregroundStyle(.white.opacity(0.95))
+                                .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
 
                             ForEach([
                                 "SwiftUI rendering",
@@ -126,7 +150,7 @@ struct ContentView: View {
                             ], id: \.self) { item in
                                 HStack(spacing: 10) {
                                     Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(.green.opacity(0.9))
+                                        .foregroundStyle(Color(red: 1.0, green: 0.66, blue: 0.24))
                                     Text(item)
                                         .foregroundStyle(.white.opacity(0.88))
                                     Spacer()
@@ -149,18 +173,23 @@ struct ContentView: View {
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
 
-                    Text("A polished SwiftUI shell around your Rust core.")
+                    Text("A polished SwiftUI shell with the same warm tone as the new icon.")
                         .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.72))
+                        .foregroundStyle(.white.opacity(0.74))
                 }
 
                 Spacer()
 
-                Image(systemName: "swift")
-                    .font(.system(size: 28, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.95))
-                    .padding(14)
-                    .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                Image("RustOrb")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 76, height: 76)
+                    .padding(12)
+                    .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22, style: .continuous)
+                            .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.26), lineWidth: 1)
+                    )
             }
 
             HStack(spacing: 8) {
@@ -177,20 +206,20 @@ struct ContentView: View {
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 12)
             .padding(.vertical, 7)
-            .background(.white.opacity(0.12), in: Capsule())
-            .foregroundStyle(.white.opacity(0.9))
+            .background(Color(red: 1.0, green: 0.63, blue: 0.18).opacity(0.14), in: Capsule())
+            .foregroundStyle(Color(red: 1.0, green: 0.86, blue: 0.62))
     }
 
     private func glassCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         content()
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.white.opacity(0.12), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+            .background(.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .stroke(.white.opacity(0.14), lineWidth: 1)
+                    .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.20), lineWidth: 1)
             )
-            .shadow(color: .black.opacity(0.18), radius: 18, x: 0, y: 10)
+            .shadow(color: .black.opacity(0.28), radius: 18, x: 0, y: 10)
     }
 
     private func stepperRow(title: String, value: Binding<Int>, range: ClosedRange<Int>) -> some View {
@@ -214,7 +243,7 @@ struct ContentView: View {
                     .frame(minWidth: 44, alignment: .trailing)
             }
             .labelsHidden()
-            .tint(.white)
+            .tint(Color(red: 1.0, green: 0.66, blue: 0.24))
         }
     }
 }
@@ -228,8 +257,8 @@ private struct PrimaryButtonStyle: ButtonStyle {
             .background(
                 LinearGradient(
                     colors: [
-                        Color(red: 0.33, green: 0.60, blue: 1.0),
-                        Color(red: 0.67, green: 0.39, blue: 1.0)
+                        Color(red: 1.0, green: 0.56, blue: 0.12),
+                        Color(red: 0.93, green: 0.30, blue: 0.08)
                     ],
                     startPoint: .leading,
                     endPoint: .trailing
