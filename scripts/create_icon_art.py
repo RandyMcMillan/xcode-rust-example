@@ -3,15 +3,16 @@
 
 from __future__ import annotations
 
-import shutil
 import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_IMAGE = ROOT / "swift-rust.jpg"
+LIGHT_SOURCE_IMAGE = ROOT / "swift-rust-light.jpg"
 APP_ICON_DIR = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "AppIcon.appiconset"
 RUST_ORB_PATH = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "RustOrb.imageset" / "RustOrb.png"
+RUST_ORB_LIGHT_PATH = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "RustOrbLight.imageset" / "RustOrbLight.png"
 
 CONTENTS_JSON = """{
   "images" : [
@@ -76,6 +77,8 @@ def ensure_image(source: Path, output: Path, size: int) -> None:
 def main() -> None:
     if not SOURCE_IMAGE.exists():
         raise FileNotFoundError(f"Missing source artwork: {SOURCE_IMAGE}")
+    if not LIGHT_SOURCE_IMAGE.exists():
+        raise FileNotFoundError(f"Missing source artwork: {LIGHT_SOURCE_IMAGE}")
 
     APP_ICON_DIR.mkdir(parents=True, exist_ok=True)
     (APP_ICON_DIR / "Contents.json").write_text(CONTENTS_JSON, encoding="utf-8")
@@ -84,6 +87,7 @@ def main() -> None:
         ensure_image(SOURCE_IMAGE, APP_ICON_DIR / filename, size)
 
     ensure_image(SOURCE_IMAGE, RUST_ORB_PATH, 1024)
+    ensure_image(LIGHT_SOURCE_IMAGE, RUST_ORB_LIGHT_PATH, 1024)
 
 
 if __name__ == "__main__":
