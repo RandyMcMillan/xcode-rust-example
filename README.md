@@ -1,6 +1,6 @@
 # xcode-rust-example
 
-![Xcode](assets/xcode-rust-example-screenshot.jpg)
+![Xcode](assets/swift-rust.png)
 
 Demonstrates the ability to generate the necessary bindings for a rust lib compiled for an apple target to be embedded and called by a Swift project in Xcode.
 

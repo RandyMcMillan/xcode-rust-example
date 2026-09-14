@@ -8,8 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_IMAGE = ROOT / "swift-rust.jpg"
-LIGHT_SOURCE_IMAGE = ROOT / "swift-rust-light.jpg"
+SOURCE_IMAGE = ROOT / "assets/swift-rust.jpg"
+LIGHT_SOURCE_IMAGE = ROOT / "assets/swift-rust-light.jpg"
 APP_ICON_DIR = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "AppIcon.appiconset"
 RUST_ORB_PATH = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "RustOrb.imageset" / "RustOrb.png"
 RUST_ORB_LIGHT_PATH = ROOT / "swiftyapp" / "swiftyapp" / "Assets.xcassets" / "RustOrbLight.imageset" / "RustOrbLight.png"
