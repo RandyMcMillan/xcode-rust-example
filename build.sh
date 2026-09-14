@@ -58,3 +58,4 @@ fi
 mkdir "${SWIFT_LIB_PATH}/Sources"
 mkdir "${SWIFT_LIB_PATH}/Sources/${SWIFT_PROJECT_NAME}"
 cp "./${MY_CRATE}/out/${MY_CRATE}.swift" "${SWIFT_LIB_PATH}/Sources/${SWIFT_PROJECT_NAME}/${SWIFT_PROJECT_NAME}.swift"
+perl -0pi -e 's#// swiftlint:enable all\\n?$#// swiftlint:disable all\n#' "${SWIFT_LIB_PATH}/Sources/${SWIFT_PROJECT_NAME}/${SWIFT_PROJECT_NAME}.swift"
