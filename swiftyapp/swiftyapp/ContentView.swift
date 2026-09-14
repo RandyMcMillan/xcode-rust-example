@@ -90,15 +90,15 @@ struct ContentView: View {
                             VStack(alignment: .leading, spacing: 10) {
                                 Label("Rust bridge", systemImage: "sparkles")
                                     .font(.headline)
-                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
+                                    .foregroundStyle(accentText)
 
                                 Text(rustHello())
                                     .font(.title2.weight(.semibold))
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(primaryText)
 
                                 Text("SwiftUI talking to Rust, dressed up in the same warm palette as the icon.")
                                     .font(.subheadline)
-                                    .foregroundStyle(.white.opacity(0.74))
+                                    .foregroundStyle(primaryText.opacity(0.74))
                             }
                         }
                     }
