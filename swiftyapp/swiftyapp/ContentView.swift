@@ -9,6 +9,7 @@ import RustyLib
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var firstValue = 10
     @State private var secondValue = 32
 
@@ -20,25 +21,44 @@ struct ContentView: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(red: 0.05, green: 0.05, blue: 0.07),
-                    Color(red: 0.10, green: 0.08, blue: 0.06),
-                    Color(red: 0.18, green: 0.09, blue: 0.03)
+                    colorScheme == .dark
+                        ? Color(red: 0.05, green: 0.05, blue: 0.07)
+                        : Color(red: 0.95, green: 0.96, blue: 0.98),
+                    colorScheme == .dark
+                        ? Color(red: 0.10, green: 0.08, blue: 0.06)
+                        : Color(red: 0.90, green: 0.92, blue: 0.96),
+                    colorScheme == .dark
+                        ? Color(red: 0.18, green: 0.09, blue: 0.03)
+                        : Color(red: 0.82, green: 0.86, blue: 0.93)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
-            RadialGradient(
-                colors: [
-                    Color(red: 1.0, green: 0.60, blue: 0.15).opacity(0.20),
-                    .clear
-                ],
-                center: .topTrailing,
-                startRadius: 20,
-                endRadius: 340
-            )
-            .ignoresSafeArea()
+            if colorScheme == .dark {
+                RadialGradient(
+                    colors: [
+                        Color(red: 1.0, green: 0.60, blue: 0.15).opacity(0.20),
+                        .clear
+                    ],
+                    center: .topTrailing,
+                    startRadius: 20,
+                    endRadius: 340
+                )
+                .ignoresSafeArea()
+            } else {
+                RadialGradient(
+                    colors: [
+                        Color(red: 0.77, green: 0.86, blue: 1.0).opacity(0.34),
+                        .clear
+                    ],
+                    center: .topTrailing,
+                    startRadius: 24,
+                    endRadius: 360
+                )
+                .ignoresSafeArea()
+            }
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
@@ -46,15 +66,25 @@ struct ContentView: View {
 
                     glassCard {
                         HStack(alignment: .center, spacing: 16) {
-                            Image("RustOrb")
+                            Image(colorScheme == .dark ? "RustOrb" : "RustOrbLight")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 84, height: 84)
                                 .padding(8)
-                                .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                                .background(
+                                    colorScheme == .dark
+                                        ? .white.opacity(0.04)
+                                        : .white.opacity(0.70),
+                                    in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 22, style: .continuous)
-                                        .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.28), lineWidth: 1)
+                                        .stroke(
+                                            colorScheme == .dark
+                                                ? Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.28)
+                                                : Color(red: 0.52, green: 0.62, blue: 0.72).opacity(0.22),
+                                            lineWidth: 1
+                                        )
                                 )
 
                             VStack(alignment: .leading, spacing: 10) {
@@ -78,14 +108,14 @@ struct ContentView: View {
                             HStack {
                                 Label("Live calculator", systemImage: "function")
                                     .font(.headline)
-                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
+                                    .foregroundStyle(accentText)
                                 Spacer()
                                 Text("Rust powered")
                                     .font(.caption.weight(.semibold))
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 6)
-                                    .background(Color(red: 1.0, green: 0.63, blue: 0.18).opacity(0.18), in: Capsule())
-                                    .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
+                                    .background(accentFill.opacity(colorScheme == .dark ? 0.18 : 0.12), in: Capsule())
+                                    .foregroundStyle(accentText)
                             }
 
                             stepperRow(
@@ -101,16 +131,16 @@ struct ContentView: View {
                             )
 
                             Divider()
-                                .overlay(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.22))
+                                .overlay(accentFill.opacity(colorScheme == .dark ? 0.22 : 0.16))
 
                             HStack(alignment: .firstTextBaseline) {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Result")
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.white.opacity(0.68))
+                                        .foregroundStyle(primaryText.opacity(0.68))
                                     Text("\(firstValue) + \(secondValue)")
                                         .font(.title3.weight(.semibold))
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(primaryText)
                                 }
 
                                 Spacer()
@@ -119,7 +149,9 @@ struct ContentView: View {
                                     .font(.system(size: 42, weight: .bold, design: .rounded))
                                     .foregroundStyle(
                                         LinearGradient(
-                                            colors: [.white, Color(red: 1.0, green: 0.76, blue: 0.42)],
+                                            colors: colorScheme == .dark
+                                                ? [.white, Color(red: 1.0, green: 0.76, blue: 0.42)]
+                                                : [Color(red: 0.10, green: 0.16, blue: 0.24), Color(red: 0.38, green: 0.45, blue: 0.58)],
                                             startPoint: .top,
                                             endPoint: .bottom
                                         )
@@ -141,7 +173,7 @@ struct ContentView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Label("What this proves", systemImage: "checkmark.seal.fill")
                                 .font(.headline)
-                                .foregroundStyle(Color(red: 1.0, green: 0.84, blue: 0.56))
+                                .foregroundStyle(accentText)
 
                             ForEach([
                                 "SwiftUI rendering",
@@ -150,9 +182,9 @@ struct ContentView: View {
                             ], id: \.self) { item in
                                 HStack(spacing: 10) {
                                     Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(Color(red: 1.0, green: 0.66, blue: 0.24))
+                                        .foregroundStyle(accentFill)
                                     Text(item)
-                                        .foregroundStyle(.white.opacity(0.88))
+                                        .foregroundStyle(primaryText.opacity(colorScheme == .dark ? 0.88 : 0.84))
                                     Spacer()
                                 }
                                 .font(.subheadline)
@@ -171,24 +203,34 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Swifty Rust")
                         .font(.system(size: 34, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(primaryText)
 
                     Text("A polished SwiftUI shell with the same warm tone as the new icon.")
                         .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.74))
+                        .foregroundStyle(primaryText.opacity(0.74))
                 }
 
                 Spacer()
 
-                Image("RustOrb")
+                Image(colorScheme == .dark ? "RustOrb" : "RustOrbLight")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 76, height: 76)
                     .padding(12)
-                    .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .background(
+                        colorScheme == .dark
+                            ? .white.opacity(0.04)
+                            : .white.opacity(0.78),
+                        in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 22, style: .continuous)
-                            .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.26), lineWidth: 1)
+                            .stroke(
+                                colorScheme == .dark
+                                    ? Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.26)
+                                    : Color(red: 0.52, green: 0.62, blue: 0.72).opacity(0.22),
+                                lineWidth: 1
+                            )
                     )
             }
 
@@ -206,20 +248,20 @@ struct ContentView: View {
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 12)
             .padding(.vertical, 7)
-            .background(Color(red: 1.0, green: 0.63, blue: 0.18).opacity(0.14), in: Capsule())
-            .foregroundStyle(Color(red: 1.0, green: 0.86, blue: 0.62))
+            .background(accentFill.opacity(colorScheme == .dark ? 0.14 : 0.10), in: Capsule())
+            .foregroundStyle(accentText)
     }
 
     private func glassCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         content()
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+            .background(cardBackground, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .stroke(Color(red: 1.0, green: 0.66, blue: 0.24).opacity(0.20), lineWidth: 1)
+                    .stroke(accentFill.opacity(colorScheme == .dark ? 0.20 : 0.14), lineWidth: 1)
             )
-            .shadow(color: .black.opacity(0.28), radius: 18, x: 0, y: 10)
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.28 : 0.12), radius: 18, x: 0, y: 10)
     }
 
     private func stepperRow(title: String, value: Binding<Int>, range: ClosedRange<Int>) -> some View {
@@ -227,10 +269,10 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.92))
+                    .foregroundStyle(primaryText.opacity(0.92))
                 Text("Tap +/- or use the randomizer")
                     .font(.caption)
-                    .foregroundStyle(.white.opacity(0.62))
+                    .foregroundStyle(primaryText.opacity(0.62))
             }
 
             Spacer()
@@ -239,12 +281,28 @@ struct ContentView: View {
                 Text("\(value.wrappedValue)")
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(primaryText)
                     .frame(minWidth: 44, alignment: .trailing)
             }
             .labelsHidden()
-            .tint(Color(red: 1.0, green: 0.66, blue: 0.24))
+            .tint(accentFill)
         }
+    }
+
+    private var primaryText: Color {
+        colorScheme == .dark ? .white : Color(red: 0.10, green: 0.14, blue: 0.20)
+    }
+
+    private var accentFill: Color {
+        colorScheme == .dark ? Color(red: 1.0, green: 0.66, blue: 0.24) : Color(red: 0.82, green: 0.38, blue: 0.10)
+    }
+
+    private var accentText: Color {
+        colorScheme == .dark ? Color(red: 1.0, green: 0.86, blue: 0.62) : Color(red: 0.42, green: 0.24, blue: 0.12)
+    }
+
+    private var cardBackground: Color {
+        colorScheme == .dark ? .white.opacity(0.05) : .white.opacity(0.76)
     }
 }
 
