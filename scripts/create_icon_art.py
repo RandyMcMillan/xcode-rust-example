@@ -66,60 +66,105 @@ def clamp(value: float) -> int:
     return max(0, min(255, int(value)))
 
 
+def lerp(a: float, b: float, t: float) -> float:
+    return a + (b - a) * t
+
+
+def smoothstep(edge0: float, edge1: float, x: float) -> float:
+    t = max(0.0, min(1.0, (x - edge0) / (edge1 - edge0)))
+    return t * t * (3.0 - 2.0 * t)
+
+
+def mix_color(base: tuple[float, float, float], color: tuple[int, int, int], alpha: float) -> tuple[float, float, float]:
+    return (
+        lerp(base[0], color[0], alpha),
+        lerp(base[1], color[1], alpha),
+        lerp(base[2], color[2], alpha),
+    )
+
+
+def rotated_ellipse(px: float, py: float, cx: float, cy: float, rx: float, ry: float, angle_deg: float) -> float:
+    angle = math.radians(angle_deg)
+    dx = px - cx
+    dy = py - cy
+    cos_a = math.cos(angle)
+    sin_a = math.sin(angle)
+    x = dx * cos_a + dy * sin_a
+    y = -dx * sin_a + dy * cos_a
+    return (x / rx) ** 2 + (y / ry) ** 2
+
+
+def rounded_rect_mask(px: float, py: float, cx: float, cy: float, half_w: float, half_h: float, radius: float) -> float:
+    dx = abs(px - cx) - half_w + radius
+    dy = abs(py - cy) - half_h + radius
+    ax = max(dx, 0.0)
+    ay = max(dy, 0.0)
+    outside = math.sqrt(ax * ax + ay * ay) - radius
+    inside = min(max(dx, dy), 0.0)
+    return outside + inside
+
+
 def pixel_color(nx: float, ny: float) -> tuple[int, int, int, int]:
-    # Background gradient.
-    r = 14 + 18 * nx + 28 * ny
-    g = 20 + 12 * nx + 18 * ny
-    b = 34 + 40 * nx + 66 * ny
+    # Background: dark, slightly iridescent glass.
+    r = lerp(12, 20, ny) + 10 * nx
+    g = lerp(16, 24, ny) + 12 * nx
+    b = lerp(30, 58, ny) + 18 * nx
 
-    # Warm glow behind the mark.
-    dx = nx - 0.46
-    dy = ny - 0.42
-    dist = math.sqrt(dx * dx + dy * dy)
-    glow = max(0.0, 1.0 - dist / 0.48)
-    r += 58 * glow
-    g += 22 * glow
-    b += 74 * glow
+    # Soft nebula glow.
+    glow = max(0.0, 1.0 - math.hypot(nx - 0.42, ny - 0.40) / 0.62)
+    r += 42 * glow
+    g += 24 * glow
+    b += 70 * glow
 
-    # Dark rounded panel.
-    panel_dx = abs(nx - 0.5)
-    panel_dy = abs(ny - 0.5)
-    panel = 1.0 if panel_dx <= 0.34 and panel_dy <= 0.34 else 0.0
-    if panel:
-        edge = max(panel_dx / 0.34, panel_dy / 0.34)
-        panel = max(0.0, 1.0 - edge)
-        r = r * 0.48 + 44 * panel
-        g = g * 0.48 + 54 * panel
-        b = b * 0.48 + 82 * panel
+    # Glass panel.
+    panel_dist = rounded_rect_mask(nx, ny, 0.5, 0.5, 0.36, 0.36, 0.12)
+    panel_alpha = smoothstep(0.10, -0.01, panel_dist)
+    if panel_alpha > 0:
+        r, g, b = mix_color((r, g, b), (20, 30, 54), panel_alpha * 0.78)
+        r, g, b = mix_color((r, g, b), (90, 112, 178), panel_alpha * 0.20)
 
-    # Orb ring and the stylized R.
-    outer = math.sqrt((nx - 0.50) ** 2 + (ny - 0.50) ** 2)
-    if 0.16 < outer < 0.22:
-        r, g, b = 235, 175, 82
-    elif outer <= 0.16:
-        r, g, b = 50, 62, 92
+    # Vignette and shadow.
+    vignette = max(0.0, 1.0 - math.hypot(nx - 0.5, ny - 0.5) / 0.88)
+    r *= 0.88 + 0.12 * vignette
+    g *= 0.90 + 0.10 * vignette
+    b *= 0.94 + 0.06 * vignette
 
-    if 0.33 <= nx <= 0.40 and 0.29 <= ny <= 0.71:
-        r, g, b = 248, 250, 255
-    if 0.40 <= nx <= 0.58 and 0.29 <= ny <= 0.37:
-        r, g, b = 248, 250, 255
-    if 0.40 <= nx <= 0.53 and 0.44 <= ny <= 0.52:
-        r, g, b = 248, 250, 255
-    if 0.42 <= nx <= 0.59 and 0.52 <= ny <= 0.71:
-        diag = (nx - 0.42) * 1.15 + 0.52
-        if diag - 0.045 <= ny <= diag + 0.028:
-            r, g, b = 248, 250, 255
+    # Main swifty ribbon.
+    main_outer = rotated_ellipse(nx, ny, 0.46, 0.46, 0.29, 0.14, -28)
+    main_inner = rotated_ellipse(nx, ny, 0.50, 0.49, 0.20, 0.08, -28)
+    main_fill = smoothstep(1.18, 0.92, main_outer) * (1.0 - smoothstep(1.12, 0.97, main_inner))
+    if main_fill > 0:
+        r, g, b = mix_color((r, g, b), (235, 245, 255), main_fill * 0.92)
+        r, g, b = mix_color((r, g, b), (111, 190, 255), main_fill * 0.16)
 
-    # Hollow bowl.
-    hole = (nx - 0.48) ** 2 / (0.12**2) + (ny - 0.44) ** 2 / (0.09**2) <= 1.0
-    if hole:
-        r, g, b = 50, 62, 92
+    # Secondary warm ribbon to give it a more artsy, layered feel.
+    accent_outer = rotated_ellipse(nx, ny, 0.55, 0.54, 0.23, 0.10, 154)
+    accent_inner = rotated_ellipse(nx, ny, 0.52, 0.51, 0.16, 0.06, 154)
+    accent_fill = smoothstep(1.20, 0.96, accent_outer) * (1.0 - smoothstep(1.12, 0.98, accent_inner))
+    if accent_fill > 0:
+        r, g, b = mix_color((r, g, b), (255, 196, 124), accent_fill * 0.84)
+        r, g, b = mix_color((r, g, b), (255, 142, 96), accent_fill * 0.18)
 
-    # Shine.
-    if 0.30 <= ny <= 0.34 and 0.34 <= nx <= 0.53:
-        r += 16
-        g += 16
-        b += 20
+    # A subtle trailing arc.
+    trail = rotated_ellipse(nx, ny, 0.56, 0.41, 0.22, 0.07, 24)
+    trail_alpha = smoothstep(1.04, 0.96, trail) * (1.0 - smoothstep(1.20, 1.02, trail))
+    if trail_alpha > 0:
+        r, g, b = mix_color((r, g, b), (164, 232, 255), trail_alpha * 0.34)
+
+    # Sparkle and orbit points.
+    spark = max(0.0, 1.0 - math.hypot(nx - 0.78, ny - 0.25) / 0.04)
+    if spark > 0:
+        r, g, b = mix_color((r, g, b), (255, 250, 238), spark)
+        r, g, b = mix_color((r, g, b), (255, 182, 92), spark * 0.55)
+
+    orb = max(0.0, 1.0 - math.hypot(nx - 0.28, ny - 0.70) / 0.028)
+    if orb > 0:
+        r, g, b = mix_color((r, g, b), (255, 173, 92), orb)
+
+    # Gentle highlight line near the top.
+    shine = smoothstep(0.34, 0.30, ny) * smoothstep(0.34, 0.48, nx) * smoothstep(0.58, 0.34, nx)
+    if shine > 0:
+        r, g, b = mix_color((r, g, b), (255, 255, 255), shine * 0.10)
 
     return clamp(r), clamp(g), clamp(b), 255
 
