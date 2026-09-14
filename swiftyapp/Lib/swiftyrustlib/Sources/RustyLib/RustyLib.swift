@@ -484,5 +484,3 @@ private func uniffiEnsureInitialized() {
         fatalError("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
 }
-
-// swiftlint:enable all
