@@ -178,3 +178,7 @@ DerivedData/
 
 out/
 *.xcframework/
+
+# Generated Rust artifacts — rebuilt by ci_post_clone.sh / build.sh
+# Placeholder librustylib.a files are force-added so Xcode resolves; real builds are ignored
+swiftyapp/Lib/swiftyrustlib/artifacts/**/*.a

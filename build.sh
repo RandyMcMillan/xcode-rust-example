@@ -6,6 +6,9 @@ SWIFT_CORE_NAME=RustyCore
 
 set -euo pipefail
 
+# Ensure Rust is available (Xcode Cloud runners need this)
+source "$HOME/.cargo/env" 2>/dev/null || true
+
 cd $MY_CRATE
 export CARGO_TARGET_DIR="$PWD/target"
 
